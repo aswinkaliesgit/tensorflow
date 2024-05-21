@@ -1061,3 +1061,131 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "dot_general_optimized",
+    srcs = ["dot_general_optimized.cc"],
+    hdrs = ["dot_general_optimized.h"],
+    deps = [
+        ":util",
+        "@ruy//ruy:ruy",
+        "@eigen_archive//:eigen3",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:dispatch",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "@com_google_absl//absl/status",
+    ],
+)
+cc_library(
+    name = "reverse",
+    srcs = ["reverse.cc"],
+    hdrs = ["reverse.h"],
+    deps = [
+        ":util",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:dispatch",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "@com_google_absl//absl/status",
+    ],
+)
+
+cc_test(
+    name = "dot_general_test",
+    srcs = ["dot_general_test.cc"],
+    linkopts = shlo_ref_linkopts(),
+    deps = [
+        ":benchmark_util",
+        ":dot_general_optimized",
+        ":test_util",
+        "//tensorflow/lite/experimental/shlo:bf16",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:status_matcher",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "//tensorflow/lite/experimental/shlo:tensor_matcher",
+        "//tensorflow/lite/experimental/shlo:tensor_with_data",
+        "@com_google_absl//absl/types:span",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "dot_general_bench",
+    srcs = ["dot_general_bench.cc"],
+    linkopts = shlo_ref_linkopts(),
+    deps = [
+        ":benchmark_util",
+        ":dot_general_optimized",
+        ":test_util",
+        ":util",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "//tensorflow/lite/experimental/shlo:tensor_with_data",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "@com_google_absl//absl/log:absl_check",
+        "@com_google_benchmark//:benchmark",
+    ],
+)
+
+cc_test(
+    name = "dot_general_bench_temp",
+    srcs = ["dot_general_bench_temp.cc"],
+    linkopts = shlo_ref_linkopts(),
+    deps = [
+        ":benchmark_util",
+        ":dot_general_optimized",
+        ":test_util",
+        ":util",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "//tensorflow/lite/experimental/shlo:tensor_with_data",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "@com_google_absl//absl/log:absl_check",
+        "@com_google_benchmark//:benchmark",
+    ],
+)
+cc_test(
+    name = "reverse_test",
+    srcs = ["reverse_test.cc"],
+    deps = [
+        ":binary_elementwise_test_util",
+        ":reverse",
+        ":test_util",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "//tensorflow/lite/experimental/shlo:quantized_tensor_element_type",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:status_matcher",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "@com_google_absl//absl/random",
+        "@com_google_absl//absl/random:distributions",
+        "@com_google_absl//absl/status",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "reverse_test_int",
+    srcs = ["reverse_test_int.cc"],
+    deps = [
+        ":binary_elementwise_test_util",
+        ":reverse",
+        ":test_util",
+        "//tensorflow/lite/experimental/shlo:data_type",
+        "//tensorflow/lite/experimental/shlo:quantize",
+        "//tensorflow/lite/experimental/shlo:quantized_tensor_element_type",
+        "//tensorflow/lite/experimental/shlo:shape",
+        "//tensorflow/lite/experimental/shlo:status_matcher",
+        "//tensorflow/lite/experimental/shlo:tensor",
+        "@com_google_absl//absl/random",
+        "@com_google_absl//absl/random:distributions",
+        "@com_google_absl//absl/status",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
